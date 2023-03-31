@@ -43,28 +43,37 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  'Mercado Barato',
-                  style: Theme.of(context).textTheme.headlineMedium,
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 60.0),
+                  child: Text(
+                    'Mercado Barato',
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
                 ),
-                Text(
-                  'Faça seu login',
-                  style: Theme.of(context).textTheme.headlineSmall,
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 40.0),
+                  child: Text(
+                    'Faça seu login',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
                 ),
-                SizedBox(
-                  height: 40,
-                  child: TextField(
-                    keyboardType: TextInputType.emailAddress,
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      focusedBorder: OutlineInputBorder(),
-                      enabledBorder: OutlineInputBorder(),
-                      labelText: "Insira seu e-mail",
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: SizedBox(
+                    height: 40,
+                    child: TextField(
+                      keyboardType: TextInputType.emailAddress,
+                      controller: _emailController,
+                      decoration: const InputDecoration(
+                        focusedBorder: OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(),
+                        labelText: "Insira seu e-mail",
+                      ),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
+                  padding: const EdgeInsets.only(bottom: 20.0),
                   child: SizedBox(
                     height: 40,
                     child: TextField(
@@ -81,18 +90,21 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    FilledButton(
-                      onPressed: () {},
-                      child: Text("Login"),
-                    ),
-                    FilledButton(
-                      onPressed: () {},
-                      child: Text("Criar Conta"),
-                    )
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      FilledButton(
+                        onPressed: () {},
+                        child: Text("Login"),
+                      ),
+                      FilledButton(
+                        onPressed: () {},
+                        child: Text("Criar Conta"),
+                      )
+                    ],
+                  ),
                 ),
                 Text("Esqueçeu sua senha ?")
               ],
