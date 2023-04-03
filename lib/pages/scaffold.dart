@@ -1,31 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:mercado_barato/pages/scaffold.dart';
 
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+class MyScaffold extends StatelessWidget {
+  final Widget child;
+   const MyScaffold({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MyScaffold(
-        child: SafeArea(
-            child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Text(
-            "Mercados cadastrados na sua região",
-            style: Theme.of(context).textTheme.titleLarge,
-            textAlign: TextAlign.center,
-          ),
-        ),
-        Expanded(
-            child: Image.asset(
-          "assets/images/map.png",
-          fit: BoxFit.fitHeight,
-        ))
-      ],
-    )));
+    return Scaffold(
+      appBar: appbar(),
+      drawer: drawer(context),
+      body: child,
+    );
   }
 }
 
@@ -75,6 +60,7 @@ Drawer drawer(BuildContext context) => Drawer(
         ],
       ),
     );
+
 ListTile myListTile(
     BuildContext context, IconData icon, String label, void Function()? onTap) {
   return ListTile(
