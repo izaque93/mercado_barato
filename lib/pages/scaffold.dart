@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mercado_barato/pages/new_list.dart';
 
 class MyScaffold extends StatelessWidget {
   final Widget child;
-   const MyScaffold({Key? key, required this.child}) : super(key: key);
+  const MyScaffold({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +52,10 @@ Drawer drawer(BuildContext context) => Drawer(
               ),
             ),
           ),
-          myListTile(context, Icons.note_add_outlined, "Nova Lista", () {}),
+          myListTile(context, Icons.note_add_outlined, "Nova Lista", () {
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const NewList()));
+          }),
           myListTile(
               context, Icons.receipt_long_outlined, "Listas Anteriores", () {}),
           myListTile(context, Icons.shopping_cart_outlined, "Carrinho", () {}),
