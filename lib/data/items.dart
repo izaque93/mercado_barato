@@ -1,3 +1,5 @@
+import 'cart.dart';
+
 Map<String, double> itensMap = {
   "Carne Bovina Moída De Patinho Resfriada QUALITÁ Bandeja 500g": 24.57,
   "Leite Longa Vida Integral ITALAC 1 Litro": 5.29,
@@ -13,3 +15,13 @@ Map<String, double> itensMap = {
   "Óleo de Soja LIZA Pet 900ml": 8.69,
   "Manteiga Francesa com Sal PRÉSIDENT Tablete 200g": 11.99,
 };
+
+class Items {
+  List<Item> loadFromDB() {
+    List<Item> itemsList = [];
+    itensMap.forEach((key, value) {
+      itemsList.add(Item(key)..setPrice(value, "extra"));
+    });
+    return itemsList;
+  }
+}
