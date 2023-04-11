@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mercado_barato/data/cart.dart';
 import 'package:mercado_barato/pages/new_list.dart';
 
 class MyScaffold extends StatelessWidget {
   final Widget child;
-  const MyScaffold({Key? key, required this.child}) : super(key: key);
+  final Widget? bottomNavigationBar;
+  const MyScaffold({Key? key, required this.child, this.bottomNavigationBar}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,6 +13,7 @@ class MyScaffold extends StatelessWidget {
       appBar: appbar(),
       drawer: drawer(context),
       body: child,
+      bottomNavigationBar: bottomNavigationBar
     );
   }
 }
@@ -29,6 +32,12 @@ AppBar appbar() {
       },
     ),
     title: const Text("Mercado Barato"),
+    actions: [
+      Cart.count > 0
+          ? IconButton(
+              onPressed: () {}, icon: const Icon(Icons.shopping_cart_outlined))
+          : Container(),
+    ],
   );
 }
 

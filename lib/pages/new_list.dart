@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mercado_barato/data/cart.dart';
-import 'package:mercado_barato/data/items.dart';
+import 'package:mercado_barato/pages/markets.dart';
 import 'package:mercado_barato/pages/scaffold.dart';
 
 class NewList extends StatefulWidget {
@@ -16,21 +16,25 @@ class _NewListState extends State<NewList> {
   final _cheboxCollumnWidth = 30.0;
   List<Item> filteredItensList = [];
 
+  bool showCountController = false;
+
   @override
   void initState() {
     super.initState();
     Items items = Items();
-    filteredItensList = items.loadFromDB();
+    final allItens = items.loadFromDB();
+    filteredItensList = allItens;
     _searchController.addListener(() {
       if (_searchController.text.isEmpty) {
         setState(() {
-          filteredItensList = items.loadFromDB();
+          filteredItensList = allItens;
         });
       } else {
-        filteredItensList = items.loadFromDB();
+        filteredItensList = allItens.toList();
         setState(() {
-          filteredItensList.removeWhere(
-              (element) => !element.name.contains(_searchController.text));
+          filteredItensList.removeWhere((element) => !element.name
+              .toLowerCase()
+              .contains(_searchController.text.toLowerCase()));
         });
       }
     });
@@ -45,6 +49,7 @@ class _NewListState extends State<NewList> {
   @override
   Widget build(BuildContext context) {
     return MyScaffold(
+      bottomNavigationBar: bottomNavigationBar(),
       child: SafeArea(
           child: Padding(
         padding: const EdgeInsets.all(14.0),
@@ -78,6 +83,31 @@ class _NewListState extends State<NewList> {
           ],
         ),
       )),
+    );
+  }
+
+  BottomAppBar bottomNavigationBar() {
+    return BottomAppBar(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          FilledButton.icon(
+            icon: const Icon(Icons.cancel_outlined),
+            onPressed: () {},
+            label: const Text("Cancelar"),
+          ),
+          const Padding(padding: EdgeInsets.only(left: 50)),
+          FilledButton.icon(
+              icon: const Icon(Icons.done_outlined),
+              onPressed: Cart.count <= 0
+                  ? null
+                  : () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const Markets()));
+                    },
+              label: const Text("Finalizar")),
+        ],
+      ),
     );
   }
 
@@ -124,26 +154,39 @@ class _NewListState extends State<NewList> {
         SizedBox(
           width: _priceCollumnWidth,
           child: Text(
+            // Get the smallest value from the markets
               "R\$${item.marketsPrice.values.reduce((value, element) => value > element ? element : value).toStringAsFixed(2)}"),
         ),
         SizedBox(
-          width: _cheboxCollumnWidth,
-          height: 30,
-          child: Checkbox(
-              value: item.isInCart,
-              onChanged: (value) {
-                value ??= false;
-                if (value == true) {
-                  setState(() {
-                    item.isInCart = true;
-                  });
-                } else {
-                  setState(() {
-                    item.isInCart = false;
-                  });
-                }
-              }),
-        )
+            width: 30,
+            height: 30,
+            child: Cart.isInCart(item)
+                ? IconButton(
+                    onPressed: () {
+                      setState(() {
+                        Cart.dec(item, 1);
+                      });
+
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Item adicionado ao carrinho'),
+                        duration: Duration(seconds: 1),
+                      ));
+                    },
+                    icon: const Icon(Icons.check),
+                  )
+                : IconButton(
+                    onPressed: () {
+                      setState(() {
+                        Cart.add(item, 1);
+                      });
+
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Item adicionado ao carrinho'),
+                        duration: Duration(seconds: 1),
+                      ));
+                    },
+                    icon: const Icon(Icons.add),
+                  ))
       ],
     );
   }
