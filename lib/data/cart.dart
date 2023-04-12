@@ -77,9 +77,29 @@ class Cart {
     totalDiference[minor] ??= 0;
     cheapestMarket.addAll(<String, double>{minor: totalMarket[minor] ?? 0.0});
     cheapestMarket[cheapestMarket.keys.first] =
-        cheapestMarket[cheapestMarket.keys.first]! - (totalDiference[minor]! + totalMarket[minor]!);
+        cheapestMarket[cheapestMarket.keys.first]! -
+            (totalDiference[minor]! + totalMarket[minor]!);
 
     return cheapestMarket;
+  }
+
+  static Map<String, double> getThreeCheapestMarketsListPrice() {
+    Map<String, double> threeCheapestMarket = {};
+    _cartList.forEach((item, qtd) {
+      assert(item.marketsPrice.length <= 3);
+      // get the minor value
+      final minorValue = item.marketsPrice.values
+          .reduce((value, element) => value < element ? value : element);
+      // market for minor value
+      final market = item.marketsPrice.keys
+          .firstWhere((market) => item.marketsPrice[market] == minorValue);
+
+      threeCheapestMarket[market] = threeCheapestMarket.containsKey(market)
+          ? threeCheapestMarket[market]! + minorValue * qtd
+          : minorValue * qtd;
+    });
+
+    return threeCheapestMarket;
   }
 
   static bool isInCart(Item item) => _cartList.keys.contains(item);
@@ -101,6 +121,10 @@ class Cart {
         _cartList.remove(item);
       }
     }
+  }
+
+  static void clear() {
+    _cartList.clear();
   }
 }
 
@@ -125,7 +149,7 @@ class Items {
     List<Item> itemsList = [];
     itensMap.forEach((key, value) {
       itemsList.add(Item(key)
-        ..setPrice(value, "extra")
+        ..setPrice(value, "Extra")
         // Generate a random value to next markets
         ..setPrice(
             value +

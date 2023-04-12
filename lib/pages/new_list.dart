@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mercado_barato/data/cart.dart';
+import 'package:mercado_barato/pages/home.dart';
 import 'package:mercado_barato/pages/markets.dart';
 import 'package:mercado_barato/pages/scaffold.dart';
 
@@ -93,7 +94,11 @@ class _NewListState extends State<NewList> {
         children: [
           FilledButton.icon(
             icon: const Icon(Icons.cancel_outlined),
-            onPressed: () {},
+            onPressed: () {
+              Cart.clear();
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const Home()));
+            },
             label: const Text("Cancelar"),
           ),
           const Padding(padding: EdgeInsets.only(left: 50)),
@@ -154,7 +159,7 @@ class _NewListState extends State<NewList> {
         SizedBox(
           width: _priceCollumnWidth,
           child: Text(
-            // Get the smallest value from the markets
+              // Get the smallest value from the markets
               "R\$${item.marketsPrice.values.reduce((value, element) => value > element ? element : value).toStringAsFixed(2)}"),
         ),
         SizedBox(
@@ -169,7 +174,7 @@ class _NewListState extends State<NewList> {
 
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text('Item adicionado ao carrinho'),
-                        duration: Duration(seconds: 1),
+                        // duration: Duration(seconds: 1),
                       ));
                     },
                     icon: const Icon(Icons.check),
@@ -181,8 +186,8 @@ class _NewListState extends State<NewList> {
                       });
 
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('Item adicionado ao carrinho'),
-                        duration: Duration(seconds: 1),
+                        content: Text('Item retirado ao carrinho'),
+                        // duration: Duration(seconds: 1),
                       ));
                     },
                     icon: const Icon(Icons.add),

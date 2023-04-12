@@ -69,20 +69,15 @@ void main() {
       Cart.dec(item2, 10);
       expect(Cart.getTwoCheapestMarketsListPrice(), {});
     });
-    test(
-        'Cart should be incremented and need indicate m1 with 10.0',
-        () {
-      Item item1 = Item("item1")
-        ..marketsPrice = {"m1": 10.0};
+    test('Cart should be incremented and need indicate m1 with 10.0', () {
+      Item item1 = Item("item1")..marketsPrice = {"m1": 10.0};
       Cart.add(item1, 1);
       expect(Cart.getTwoCheapestMarketsListPrice(), {"m1": 10.0},
           reason: "Expected the chepeast market is m1 ");
       Cart.dec(item1, 1);
       expect(Cart.getTwoCheapestMarketsListPrice(), {});
     });
-    test(
-        'Cart should be incremented and need indicate m2 with 9.0',
-        () {
+    test('Cart should be incremented and need indicate m2 with 9.0', () {
       Item item1 = Item("item1")
         ..marketsPrice = {"m1": 10.0, "m2": 9.0, "m3": 11.0};
       Cart.add(item1, 1);
@@ -90,6 +85,37 @@ void main() {
           reason: "Expected the chepeast market is m2 ");
       Cart.dec(item1, 1);
       expect(Cart.getTwoCheapestMarketsListPrice(), {});
+    });
+  });
+  group("Cart - getThreeCheapestMarketsListPrice", () {
+    test('Cart should be incremented and need indicate m2 with 180.0', () {
+      Item item1 = Item("item1")
+        ..marketsPrice = {"m1": 10.0, "m2": 9.0, "m3": 11.0};
+      Item item2 = Item("item2")
+        ..marketsPrice = {"m1": 10.0, "m2": 9.0, "m3": 11.0};
+      Cart.add(item1, 10);
+      Cart.add(item2, 10);
+      expect(Cart.getThreeCheapestMarketsListPrice(), {"m2": 180.0},
+          reason: "Expected the chepeast market is m2 and the second is m1");
+      Cart.dec(item1, 10);
+      Cart.dec(item2, 10);
+      expect(Cart.getThreeCheapestMarketsListPrice(), {});
+    });
+
+    test(
+        'Cart should be incremented and need indicate m2 with 90.0 and m1 with 80.0',
+        () {
+      Item item1 = Item("item1")
+        ..marketsPrice = {"m1": 10.0, "m2": 9.0, "m3": 11.0};
+      Item item2 = Item("item2")
+        ..marketsPrice = {"m1": 8.0, "m2": 9.0, "m3": 11.0};
+      Cart.add(item1, 10);
+      Cart.add(item2, 10);
+      expect(Cart.getThreeCheapestMarketsListPrice(), {"m1": 80.0, "m2": 90.0},
+          reason: "");
+      Cart.dec(item1, 10);
+      Cart.dec(item2, 10);
+      expect(Cart.getThreeCheapestMarketsListPrice(), {});
     });
   });
 }
