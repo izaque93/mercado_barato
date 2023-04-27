@@ -1,5 +1,37 @@
 import 'dart:math';
 
+class Storage {
+  static List<Storage> savedLists = [];
+  final Map<Item, int> _itemlist = {};
+  final DateTime timestamp;
+
+  Storage(Map<Item, int> itemlist, this.timestamp) {
+    itemlist.forEach((key, value) {
+      _itemlist[key] = value;
+    });
+  }
+
+  void save() => savedLists.add(this);
+  List<Storage> getLists() => savedLists.toList();
+
+  double getTotalPrice() {
+    double total = 0;
+    for (var element in _itemlist.entries) {
+      var minor = element.key.marketsPrice.values
+          .reduce((value, element) => value < element ? value : element);
+      total += minor * element.value;
+    }
+    return total;
+  }
+
+  void setCart() {
+    Cart.clear();
+    _itemlist.forEach((item, count) {
+      Cart.add(item, count);
+    });
+  }
+}
+
 class Item {
   final String name;
 
@@ -102,7 +134,13 @@ class Cart {
     return threeCheapestMarket;
   }
 
-  static bool isInCart(Item item) => _cartList.keys.contains(item);
+  static bool isInCart(Item item) {
+    bool inCart = false;
+    _cartList.keys.forEach((_item) {
+      if (item.name == _item.name) inCart = true;
+    });
+    return inCart;
+  }
 
   static int get count => _cartList.length;
 
@@ -123,9 +161,36 @@ class Cart {
     }
   }
 
+  static Map<String, Map<Item, double>> getListByMarkets(List<String> markets) {
+    if (markets.isEmpty || _cartList.isEmpty) {
+      return {};
+    }
+    Map<String, Map<Item, double>> marketList = {};
+
+    _cartList.forEach((item, count) {
+      double minor = 0;
+      String minorMarket = "";
+      item.marketsPrice.forEach((market, price) {
+        if (markets.contains(market)) {
+          if (price < minor || minor == 0) {
+            minor = price;
+            minorMarket = market;
+          }
+        }
+      });
+      if (minorMarket != '' && minor != 0) {
+        marketList[minorMarket] ??= {};
+        marketList[minorMarket]!.addAll({item: minor * count});
+      }
+    });
+    return marketList;
+  }
+
   static void clear() {
     _cartList.clear();
   }
+
+  static void saveList() => Storage(_cartList, DateTime.now()).save();
 }
 
 Map<String, double> itensMap = {

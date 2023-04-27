@@ -118,4 +118,95 @@ void main() {
       expect(Cart.getThreeCheapestMarketsListPrice(), {});
     });
   });
+  group("Cart - Get cart list by market", () {
+    test("test with no market", () {
+      Item item1 = Item("item1")
+        ..marketsPrice = {"m1": 10.0, "m2": 9.0, "m3": 11.0};
+      Item item2 = Item("item2")
+        ..marketsPrice = {"m1": 8.0, "m2": 9.0, "m3": 11.0};
+      Cart.add(item1, 10);
+      Cart.add(item2, 10);
+      expect(Cart.getListByMarkets([]), {}, reason: "");
+      Cart.dec(item1, 10);
+      Cart.dec(item2, 10);
+    });
+
+    test("test with no items", () {
+      expect(Cart.getListByMarkets(["m1", "m2", "m3"]), {}, reason: "");
+    });
+    test("test with one market and one item", () {
+      Item item1 = Item("item1")
+        ..marketsPrice = {"m1": 10.0, "m2": 9.0, "m3": 11.0};
+      Cart.add(item1, 10);
+      expect(
+          Cart.getListByMarkets(["m1"]),
+          {
+            "m1": {item1: 100.0}
+          },
+          reason: "");
+      Cart.dec(item1, 10);
+    });
+    test("test with one market and many items", () {
+      Item item1 = Item("item1")
+        ..marketsPrice = {"m1": 10.0, "m2": 9.0, "m3": 11.0};
+      Item item2 = Item("item2")
+        ..marketsPrice = {"m1": 8.0, "m2": 9.0, "m3": 11.0};
+      Cart.add(item1, 10);
+      Cart.add(item2, 10);
+      expect(
+          Cart.getListByMarkets(["m1"]),
+          {
+            "m1": {item1: 100.0, item2: 80.0}
+          },
+          reason: "");
+      Cart.dec(item1, 10);
+      Cart.dec(item2, 10);
+    });
+    test("test with many markets and one items", () {
+      Item item1 = Item("item1")
+        ..marketsPrice = {"m1": 10.0, "m2": 9.0, "m3": 11.0};
+      Cart.add(item1, 10);
+
+      expect(
+          Cart.getListByMarkets(["m1", "m2", "m3"]),
+          {
+            "m2": {item1: 90.0}
+          },
+          reason: "");
+      Cart.dec(item1, 10);
+    });
+    test("test with many markets and many items", () {
+      Item item1 = Item("item1")
+        ..marketsPrice = {"m1": 10.0, "m2": 9.0, "m3": 11.0};
+      Item item2 = Item("item2")
+        ..marketsPrice = {"m1": 8.0, "m2": 9.0, "m3": 11.0};
+      Cart.add(item1, 10);
+      Cart.add(item2, 10);
+      expect(
+          Cart.getListByMarkets(["m1", "m2", "m3"]),
+          {
+            "m2": {item1: 90.0},
+            "m1": {item2: 80.0}
+          },
+          reason: "");
+      Cart.dec(item1, 10);
+      Cart.dec(item2, 10);
+    });
+    test("test with a market out of list of items market", () {
+      Item item1 = Item("item1")
+        ..marketsPrice = {"m1": 10.0, "m2": 9.0, "m3": 11.0};
+      Item item2 = Item("item2")
+        ..marketsPrice = {"m1": 8.0, "m2": 9.0, "m3": 11.0};
+      Cart.add(item1, 10);
+      Cart.add(item2, 10);
+      expect(
+          Cart.getListByMarkets(["m4"]),
+          {
+            
+          },
+          reason: "");
+      Cart.dec(item1, 10);
+      Cart.dec(item2, 10);
+    });
+  });
 }

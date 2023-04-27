@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mercado_barato/data/cart.dart';
-import 'package:mercado_barato/pages/marketDetails.dart';
+import 'package:mercado_barato/pages/market_details.dart';
 import 'package:mercado_barato/pages/scaffold.dart';
 
 class Markets extends StatelessWidget {
@@ -25,7 +25,9 @@ class Markets extends StatelessWidget {
                   ? null
                   : () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const MarketDetails()));
+                          builder: (context) => MarketDetails(
+                              Cart.getThreeCheapestMarketsListPrice()
+                                  )));
                     },
               label: const Text("Finalizar")),
         ],
@@ -69,21 +71,42 @@ class Markets extends StatelessWidget {
             const Padding(padding: EdgeInsets.only(top: 20.0)),
             const Divider(),
             const Padding(padding: EdgeInsets.only(top: 20.0)),
-            oneMarket(
-                minorMarketPrice, cheapestMarketValue, context, cheapestMarket),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        MarketDetails(cheapestMarket)));
+              },
+              child: oneMarket(minorMarketPrice, cheapestMarketValue, context,
+                  cheapestMarket),
+            ),
             const Padding(padding: EdgeInsets.only(top: 20.0)),
             const Divider(),
             // Two Markets -------------------
             const Padding(padding: EdgeInsets.only(top: 20.0)),
-            twoMarkets(minorMarketPrice, twoCheapestMarketValue, context,
-                twoCheapestMarket),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        MarketDetails(twoCheapestMarket)));
+              },
+              child: twoMarkets(minorMarketPrice, twoCheapestMarketValue,
+                  context, twoCheapestMarket),
+            ),
             const Padding(padding: EdgeInsets.only(top: 20.0)),
 
             const Divider(),
             // three Markets -------------------
             const Padding(padding: EdgeInsets.only(top: 20.0)),
-            threeMarkets(minorMarketPrice, threeCheapestMarketValue, context,
-                threeCheapestMarket),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        MarketDetails(threeCheapestMarket)));
+              },
+              child: threeMarkets(minorMarketPrice, threeCheapestMarketValue,
+                  context, threeCheapestMarket),
+            ),
           ],
         ),
       )),
